@@ -1,0 +1,22 @@
+#!/usr/bin/expect -f
+
+#ssh服务器
+#set servers(name) "user@host password"
+
+proc ssh {name} {
+    global servers
+    
+    set server $servers($name)
+    set config [split $server " "]
+    spawn ssh [lindex $config 0]
+    expect "assword"
+    send "[lindex $config 1]\n"
+    expect "root"
+    interact
+}
+
+set tag [lindex $argv 0]
+
+if {[info exists servers($tag)]} {
+    ssh $tag
+}
